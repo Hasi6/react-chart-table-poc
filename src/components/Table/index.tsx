@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { data, type Person } from '@/components/Table/data';
+import { Checkbox } from '@mui/material';
 
 import './style.scss';
-import { ReactNode } from 'react';
 
 function TableComponent() {
   const columns: MRT_ColumnDef<Person>[] = [
@@ -12,7 +13,11 @@ function TableComponent() {
       Header(props) {
         return (
           <>
-            <input type="checkbox" onChange={() => props.table.toggleAllRowsExpanded()} />
+            <Checkbox
+              indeterminate={props.table.getIsSomeRowsSelected()}
+              checked={props.table.getIsAllRowsSelected()}
+              onChange={() => props.table.toggleAllRowsSelected()}
+            />
           </>
         );
       },
@@ -24,8 +29,8 @@ function TableComponent() {
       GroupedCell(props) {
         return (
           <div style={{ display: 'flex' }}>
-            <input
-              type="checkbox"
+            <Checkbox
+              indeterminate={props.row.getIsSomeSelected()}
               checked={props.row.getIsAllSubRowsSelected()}
               onChange={() => props.row.toggleSelected()}
             />
@@ -43,9 +48,8 @@ function TableComponent() {
       },
       PlaceholderCell(props) {
         return (
-          <div style={{ display: 'flex' }}>
-            <input
-              type="checkbox"
+          <div style={{ display: 'flex', marginLeft: 100 }}>
+            <Checkbox
               checked={props.row.getIsSelected()}
               onChange={() => props.row.toggleSelected()}
             />
@@ -68,6 +72,19 @@ function TableComponent() {
     <div>
       <h1>Table Component</h1>
       <MaterialReactTable
+        columns={columns}
+        data={data}
+        enableColumnResizing
+        enableGrouping
+        enableStickyHeader
+        enableColumnOrdering
+        enableStickyFooter
+        initialState={{
+          grouping: ['state'],
+          pagination: { pageIndex: 0, pageSize: 20 }
+        }}
+        muiToolbarAlertBannerChipProps={{ color: 'primary' }}
+        muiTableContainerProps={{ sx: { maxHeight: 700 } }}
         muiTableHeadCellProps={{
           style: {
             background: '#575756',
@@ -83,9 +100,6 @@ function TableComponent() {
             paddingLeft: 10
           }
         }}
-        columns={columns}
-        data={data}
-        enableColumnResizing
         muiExpandAllButtonProps={{
           style: {
             display: 'none'
@@ -96,15 +110,7 @@ function TableComponent() {
             display: 'none'
           }
         }}
-        enableGrouping
         enableRowSelection
-        initialState={{
-          grouping: ['state'],
-          pagination: {
-            pageSize: 20,
-            pageIndex: 1
-          }
-        }}
         muiSelectAllCheckboxProps={{
           style: {
             display: 'none'
@@ -115,8 +121,6 @@ function TableComponent() {
             display: 'none'
           }
         }}
-        muiTableContainerProps={{ sx: { maxHeight: 700 } }}
-        onHoveredColumnChange={console.log}
         muiTopToolbarProps={{
           style: {
             display: 'none'
