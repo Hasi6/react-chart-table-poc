@@ -32,7 +32,10 @@ function TableComponent() {
             <Checkbox
               indeterminate={props.row.getIsSomeSelected()}
               checked={props.row.getIsAllSubRowsSelected()}
-              onChange={() => props.row.toggleSelected()}
+              onChange={() => {
+                props.row.toggleSelected();
+                console.log(props.row.original);
+              }}
             />
             <p onClick={() => props.row.toggleSelected()}>
               {props.cell.getValue() as ReactNode}({props.row.getLeafRows().length})
@@ -51,7 +54,10 @@ function TableComponent() {
           <div style={{ display: 'flex', marginLeft: 100 }}>
             <Checkbox
               checked={props.row.getIsSelected()}
-              onChange={() => props.row.toggleSelected()}
+              onChange={() => {
+                props.row.toggleSelected();
+                console.log(props);
+              }}
             />
             <p>{props.cell.getValue() as ReactNode}</p>
           </div>
@@ -81,7 +87,7 @@ function TableComponent() {
         enableStickyFooter
         initialState={{
           grouping: ['state'],
-          pagination: { pageIndex: 0, pageSize: 20 }
+          pagination: { pageIndex: 0, pageSize: 10 }
         }}
         muiToolbarAlertBannerChipProps={{ color: 'primary' }}
         muiTableContainerProps={{ sx: { maxHeight: 700 } }}
